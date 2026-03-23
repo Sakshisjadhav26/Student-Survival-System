@@ -1,0 +1,1001 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Student Survival System</title>
+  <style>
+    :root {
+      --bg: #fff0f6;
+      --panel: rgba(255, 255, 255, 0.7);
+      --muted: #a78b9b;
+      --accent: #ff4d8d;
+      --accent2: #ff9ac2;
+      --glass: rgba(255, 255, 255, 0.4);
+      --card: linear-gradient(180deg, rgba(255, 182, 193, 0.25), rgba(255, 255, 255, 0.2));
+      --radius: 16px;
+
+      font-family: "Poppins", "Inter", sans-serif;
+      color-scheme: light;
+    }
+
+    html,
+    body {
+      height: 100%;
+      margin: 0;
+      background: radial-gradient(circle at 20% 20%, #ffd6e8, transparent),
+        radial-gradient(circle at 80% 80%, #ffe4f2, transparent),
+        linear-gradient(180deg, #fff0f6 0%, #ffe6f0 100%);
+      color: #4b2c39;
+    }
+
+    .app {
+      max-width: 1200px;
+      margin: 28px auto;
+      padding: 20px;
+      display: grid;
+      gap: 20px;
+      grid-template-columns: 1fr 420px;
+    }
+
+    header {
+      grid-column: 1/-1;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .logo {
+      width: 56px;
+      height: 56px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #ff4d8d, #38061a);
+      font-weight: 700;
+      font-size: 20px;
+      color: white;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 20px;
+    }
+
+    p.lead {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    main {
+      background: var(--panel);
+      padding: 18px;
+      border-radius: var(--radius);
+      box-shadow: 0 8px 30px rgba(2, 6, 23, 0.6);
+      height: calc(100vh - 120px);
+      overflow: auto;
+    }
+
+    aside {
+      background: var(--glass);
+      padding: 16px;
+      border-radius: 12px;
+      min-height: 200px;
+      height: calc(100vh - 120px);
+      overflow: auto;
+    }
+
+    .section,
+    main,
+    aside {
+      backdrop-filter: blur(12px);
+      background: rgba(255, 255, 255, 0.6);
+      border: 1px solid rgba(255, 182, 193, 0.3);
+      box-shadow: 0 8px 25px rgba(255, 105, 180, 0.15);
+    }
+
+    .section {
+      background: var(--card);
+      padding: 14px;
+      border-radius: 10px;
+      margin-bottom: 14px;
+    }
+
+    .flex {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    label {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    input[type="text"],
+    input[type="number"],
+    input[type="datetime-local"],
+    textarea,
+    select {
+      width: 100%;
+      padding: 8px 10px;
+      border-radius: 8px;
+      background: transparent;
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      color: inherit;
+      font-size: 14px;
+      box-sizing: border-box;
+    }
+
+    textarea {
+      min-height: 80px;
+      resize: vertical;
+    }
+
+
+    button {
+      background: linear-gradient(135deg, #ff4d8d, #ff9ac2);
+      border: none;
+      color: white;
+      padding: 8px 14px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(255, 105, 180, 0.3);
+    }
+
+    button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 18px rgba(255, 105, 180, 0.5);
+    }
+
+    .muted {
+      color: var(--muted);
+    }
+
+    .small {
+      font-size: 13px;
+    }
+
+    .decisions-list,
+    .capsules-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.02);
+      padding: 10px;
+      border-radius: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .chip {
+      background: rgba(255, 255, 255, 0.03);
+      padding: 6px 8px;
+      border-radius: 999px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .option-row {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .option-row input[type="text"] {
+      flex: 1;
+    }
+
+    .option-row input[type="number"] {
+      width: 90px;
+    }
+
+    .controls {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .results {
+      background: linear-gradient(135deg, rgba(255, 105, 180, 0.2), rgba(255, 182, 193, 0.3));
+      border: 1px solid rgba(255, 105, 180, 0.3);
+
+    }
+
+    .result-item {
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .muted-block {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .list-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .secondary {
+      background: rgba(255, 182, 193, 0.2);
+      border: 1px solid rgba(255, 105, 180, 0.3);
+      color: #ff4d8d;
+    }
+
+
+    .danger {
+      background: linear-gradient(90deg, #ff4d6d, #ff7b9a);
+      color: purple;
+    }
+
+    .caption {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    footer {
+      grid-column: 1/-1;
+      text-align: center;
+      color: var(--muted);
+      font-size: 13px;
+      margin-top: 6px;
+    }
+
+    /* responsive */
+    @media (max-width:980px) {
+      .app {
+        grid-template-columns: 1fr;
+        padding: 12px;
+      }
+
+      aside {
+        order: 2;
+        height: auto;
+      }
+
+      main {
+        order: 1;
+        height: auto;
+      }
+    }
+
+    /* modal */
+    .modal-back {
+      position: fixed;
+      inset: 0;
+      background: rgba(2, 6, 23, 0.6);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 50;
+    }
+
+    .modal {
+      background: var(--panel);
+      border-radius: 12px;
+      width: 720px;
+      max-width: 96%;
+      padding: 18px;
+      box-shadow: 0 10px 40px rgba(2, 6, 23, 0.7);
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .close-btn {
+      background: transparent;
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      color: var(--muted);
+      padding: 6px 8px;
+      border-radius: 8px;
+    }
+
+    .file-preview {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 8px;
+    }
+
+    .file-thumb {
+      background: rgba(255, 255, 255, 0.02);
+      padding: 8px;
+      border-radius: 8px;
+      min-width: 120px;
+      max-width: 200px;
+    }
+
+    .empty {
+      color: var(--muted);
+      font-size: 13px;
+      padding: 8px;
+    }
+
+    .note {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 8px;
+    }
+
+    .card {
+      transition: 0.3s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-4px) scale(1.01);
+      box-shadow: 0 10px 25px rgba(255, 105, 180, 0.25);
+    }
+
+    ::selection {
+      background: #ff9ac2;
+      color: white;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app" role="application" aria-labelledby="app-title">
+    <header>
+      <div class="logo">SS</div>
+      <div>
+        <h1 id="app-title">Student Survival System</h1>
+        <p class="lead">Decision Maker • Digital Time Capsule — tools to help students plan, decide, and preserve ideas.
+        </p>
+      </div>
+      
+    </header>
+
+    <main>
+      <section class="section" aria-labelledby="decisions-title">
+        <div class="flex" style="justify-content:space-between; align-items:flex-start;">
+          <div>
+            <h2 id="decisions-title" style="margin:0 0 6px 0">Decision Maker</h2>
+            <div class="caption">Create a decision with options and pick using random or weighted choice.</div>
+          </div>
+          <div class="muted-block small">Quick picks for: schedule, meal, study topic</div>
+        </div>
+
+        <div style="margin-top:12px; display:grid; gap:10px;">
+          <label class="small">Decision name</label>
+          <input id="decision-name" type="text" placeholder="e.g., Tonight's activity or Study topic" />
+
+          <div style="display:flex; gap:8px; align-items:center;">
+            <button id="add-option" class="">+ Add option</button>
+            <button id="clear-options" class="secondary">Clear</button>
+            <select id="preset-options" class="secondary">
+              <option value="">Presets</option>
+              <option value="Study|Homework|Group Study|Break|Exercise">Study: common</option>
+              <option value="Pasta|Pizza|Salad|Sandwich|Ramen">Dinner quick</option>
+              <option value="Math|CS|History|Physics|Chemistry">Subjects</option>
+            </select>
+            <div style="margin-left:auto; display:flex; gap:8px; align-items:center;">
+              
+              <input type="hidden" id="pick-method" value="random">
+            </div>
+          </div>
+
+          <div id="options-container" style="margin-top:8px;"></div>
+
+          <div class="flex" style="justify-content:space-between; margin-top:6px;">
+            <div class="controls">
+              <button id="run-decision">Run Decision</button>
+              <button id="save-decision" class="secondary">Save Profile</button>
+              <button id="load-decision" class="secondary">Load Profile</button>
+            </div>
+            <div class="caption">Saved profiles persist in this browser</div>
+          </div>
+
+          <div id="decision-results" class="results" style="display:none;">
+            <div class="result-item" id="decision-result-text"></div>
+            <div class="muted-block small" id="decision-details"></div>
+          </div>
+
+          <div style="margin-top:8px;">
+            <div class="caption">Saved Decision Profiles</div>
+            <div id="decisions-list" class="decisions-list"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="capsules-title">
+        <h2 id="capsules-title" style="margin:0 0 6px 0">Digital Time Capsule</h2>
+        <div class="caption">Write a message, optionally attach files, set an unlock date/time — it will be locked until
+          then.</div>
+
+        <div style="margin-top:12px; display:grid; gap:8px;">
+          <label class="small">Title</label>
+          <input id="capsule-title" type="text" placeholder="Title (e.g., 'Finals note to future me')" />
+
+          <label class="small">Message</label>
+          <textarea id="capsule-message" placeholder="Write your message..."></textarea>
+
+          <label class="small">Attach files (images, PDF, small files). They are stored as base64 in the
+            browser.</label>
+          <input id="capsule-files" type="file" multiple />
+
+          <div class="flex">
+            <div style="flex:1;">
+              <label class="small">Unlock at</label>
+              <input id="capsule-unlock" type="datetime-local" />
+            </div>
+            <div style="width:200px;">
+              <label class="small">Visibility</label>
+              <select id="capsule-visibility">
+                <option value="private">Private (only you)</option>
+                <option value="shared">Shared — public text (still local)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="flex" style="justify-content:space-between;">
+            <div class="controls">
+              <button id="create-capsule">Create Capsule</button>
+              <button id="clear-capsule" class="secondary">Clear</button>
+            </div>
+            <div class="caption">Capsules stored locally; to keep longer, export.</div>
+          </div>
+
+          <div style="margin-top:8px;">
+            <div class="caption">Your capsules</div>
+            <div id="capsules-list" class="capsules-list"></div>
+            <div class="note">Tip: export an important capsule to a file to back it up. Local storage can be cleared by
+              the browser.</div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <aside>
+      <div class="section">
+        <h3 style="margin:0 0 8px 0">Quick Tools</h3>
+        <div style="display:grid; gap:8px;">
+          <button id="quick-study">Pick Study Topic</button>
+          <button id="quick-meal" class="secondary">Pick Quick Meal</button>
+          <button id="export-all" class="secondary">Export All Data</button>
+          <button id="import-all" class="secondary">Import Data</button>
+        </div>
+        
+      </div>
+
+      <div class="section">
+        <h4 style="margin:0 0 8px 0">Usage</h4>
+        <ol class="muted-block small" style="margin:0 0 0 16px;">
+          <li>Create decision options and press Run Decision</li>
+          <li>For weighted picks set weights next to options (Method: Weighted)</li>
+          <li>Create a time capsule and set an unlock date — it will remain locked until then</li>
+        </ol>
+      </div>
+
+     
+    </aside>
+
+    <footer>💖 Made by Sakshi Jadhav  <span id="last-saved">💖</span></footer>
+  </div>
+
+  <!-- Modal -->
+  <div id="modal-root" class="modal-back" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="modal" role="document">
+      <div class="modal-header">
+        <strong id="modal-title">Modal</strong>
+        <div>
+          <button id="modal-close" class="close-btn">Close</button>
+        </div>
+      </div>
+      <div id="modal-body" style="margin-top:12px;"></div>
+    </div>
+  </div>
+
+  <script>
+    // Utilities
+    const uid = () => Math.random().toString(36).slice(2, 9);
+
+    // Local storage keys
+    const LS_DECISIONS = 'ss_decision_profiles_v1';
+    const LS_CAPSULES = 'ss_time_capsules_v1';
+    const LS_META = 'ss_meta_v1';
+
+    // Elements
+    const optionsContainer = document.getElementById('options-container');
+    const addOptionBtn = document.getElementById('add-option');
+    const runDecisionBtn = document.getElementById('run-decision');
+    const decisionNameInput = document.getElementById('decision-name');
+    const decisionResults = document.getElementById('decision-results');
+    const decisionResultText = document.getElementById('decision-result-text');
+    const decisionDetails = document.getElementById('decision-details');
+    const pickMethod = document.getElementById('pick-method');
+    const saveDecisionBtn = document.getElementById('save-decision');
+    const loadDecisionBtn = document.getElementById('load-decision');
+    const decisionsListDiv = document.getElementById('decisions-list');
+    const presetOptions = document.getElementById('preset-options');
+    const clearOptionsBtn = document.getElementById('clear-options');
+
+    const capsuleTitle = document.getElementById('capsule-title');
+    const capsuleMessage = document.getElementById('capsule-message');
+    const capsuleFiles = document.getElementById('capsule-files');
+    const capsuleUnlock = document.getElementById('capsule-unlock');
+    const createCapsuleBtn = document.getElementById('create-capsule');
+    const clearCapsuleBtn = document.getElementById('clear-capsule');
+    const capsulesListDiv = document.getElementById('capsules-list');
+    const capsuleVisibility = document.getElementById('capsule-visibility');
+
+    const quickStudyBtn = document.getElementById('quick-study');
+    const quickMealBtn = document.getElementById('quick-meal');
+    const exportAllBtn = document.getElementById('export-all');
+    const importAllBtn = document.getElementById('import-all');
+    const modalRoot = document.getElementById('modal-root');
+    const modalTitle = document.getElementById('modal-title');
+    const modalBody = document.getElementById('modal-body');
+    const modalClose = document.getElementById('modal-close');
+    const lastSavedSpan = document.getElementById('last-saved');
+
+    // State
+    let decisionOptions = []; // {id, text, weight}
+    let decisionProfiles = loadJSON(LS_DECISIONS) || [];
+    let capsules = loadJSON(LS_CAPSULES) || [];
+    let meta = loadJSON(LS_META) || { lastSaved: '💖' };
+    lastSavedSpan.textContent = meta.lastSaved || '💖';
+
+    // Init
+    renderOptions();
+    renderDecisionProfiles();
+    renderCapsules();
+
+    // Options management
+    function renderOptions() {
+      optionsContainer.innerHTML = '';
+      if (decisionOptions.length === 0) {
+        const el = document.createElement('div');
+        el.className = 'empty';
+        el.textContent = 'No options yet. Click "Add option" or pick a preset.';
+        optionsContainer.appendChild(el);
+        return;
+      }
+      decisionOptions.forEach(opt => {
+        const row = document.createElement('div');
+        row.className = 'option-row card';
+        row.style.alignItems = 'center';
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.value = opt.text;
+        input.placeholder = 'Option text';
+        input.addEventListener('input', e => { opt.text = e.target.value; });
+        const weight = document.createElement('input');
+        weight.type = 'number';
+        weight.min = 0;
+        weight.step = 1;
+        weight.value = opt.weight || 1;
+        weight.title = 'Weight (for weighted picking)';
+        weight.addEventListener('input', e => { opt.weight = Math.max(0, Number(e.target.value)); });
+        const del = document.createElement('button');
+        del.className = 'secondary';
+        del.textContent = 'Remove';
+        del.addEventListener('click', () => {
+          decisionOptions = decisionOptions.filter(o => o.id !== opt.id);
+          renderOptions();
+        });
+        row.appendChild(input);
+        if (pickMethod.value === 'weighted') {
+          row.appendChild(weight);
+        } else {
+          // still show weight but smaller
+          const wmini = document.createElement('input');
+          wmini.type = 'number'; wmini.min = 0; wmini.value = opt.weight || 1; wmini.style.width = '80px';
+          wmini.addEventListener('input', e => { opt.weight = Math.max(0, Number(e.target.value)); });
+          row.appendChild(wmini);
+        }
+        row.appendChild(del);
+        optionsContainer.appendChild(row);
+      });
+    }
+
+    addOptionBtn.addEventListener('click', () => {
+      decisionOptions.push({ id: uid(), text: '', weight: 1 });
+      renderOptions();
+    });
+
+    presetOptions.addEventListener('change', () => {
+      const v = presetOptions.value;
+      if (!v) return;
+      const parts = v.split('|').map(s => s.trim()).filter(Boolean);
+      parts.forEach(p => decisionOptions.push({ id: uid(), text: p, weight: 1 }));
+      presetOptions.value = '';
+      renderOptions();
+    });
+
+    pickMethod.addEventListener('change', renderOptions);
+
+    clearOptionsBtn.addEventListener('click', () => {
+      decisionOptions = [];
+      renderOptions();
+    });
+
+    // Decision run
+    runDecisionBtn.addEventListener('click', () => {
+      const name = (decisionNameInput.value || 'Decision').trim();
+      const validOptions = decisionOptions.filter(o => o.text && o.text.trim());
+      if (validOptions.length === 0) {
+        showModal('No options', '<div class="empty">Add at least one option before running the decision.</div>');
+        return;
+      }
+      let chosen;
+      if (pickMethod.value === 'random') {
+        const i = Math.floor(Math.random() * validOptions.length);
+        chosen = validOptions[i];
+      } else {
+        // Weighted pick
+        const total = validOptions.reduce((s, o) => s + (Number(o.weight) || 0), 0);
+        if (total <= 0) {
+          showModal('Invalid weights', '<div class="empty">All weights are zero. Please set positive weights or switch to Random method.</div>');
+          return;
+        }
+        let r = Math.random() * total;
+        for (const o of validOptions) {
+          r -= (Number(o.weight) || 0);
+          if (r <= 0) { chosen = o; break; }
+        }
+        chosen = chosen || validOptions[validOptions.length - 1];
+      }
+
+      decisionResults.style.display = 'block';
+      decisionResultText.textContent = chosen.text;
+      decisionDetails.textContent = `Decision: ${name} • Method: ${pickMethod.value} • Options: ${validOptions.length}`;
+
+      // Save as quick temporary metadata
+      meta.lastSaved = (new Date()).toLocaleString();
+      saveJSON(LS_META, meta);
+      lastSavedSpan.textContent = meta.lastSaved;
+    });
+
+    // Profiles: save/load
+    saveDecisionBtn.addEventListener('click', () => {
+      const name = (decisionNameInput.value || 'Decision').trim();
+      const validOptions = decisionOptions.filter(o => o.text && o.text.trim());
+      if (validOptions.length === 0) {
+        showModal('Cannot save', '<div class="empty">Add at least one option before saving a profile.</div>');
+        return;
+      }
+      const profile = {
+        id: uid(),
+        name,
+        method: pickMethod.value,
+        options: validOptions.map(o => ({ text: o.text, weight: o.weight || 1 })),
+        createdAt: new Date().toISOString()
+      };
+      decisionProfiles.push(profile);
+      saveJSON(LS_DECISIONS, decisionProfiles);
+      renderDecisionProfiles();
+      meta.lastSaved = (new Date()).toLocaleString();
+      saveJSON(LS_META, meta);
+      lastSavedSpan.textContent = meta.lastSaved;
+    });
+
+    loadDecisionBtn.addEventListener('click', () => {
+      if (decisionProfiles.length === 0) {
+        showModal('No profiles', '<div class="empty">No saved decision profiles available.</div>');
+        return;
+      }
+      // Show modal with list
+      const html = document.createElement('div');
+      decisionProfiles.forEach(p => {
+        const div = document.createElement('div');
+        div.className = 'card';
+        const left = document.createElement('div');
+        left.innerHTML = '<strong>' + escapeHtml(p.name) + '</strong><div class="muted-block small">Options: ' + p.options.length + '</div>';
+        const right = document.createElement('div');
+        right.className = 'list-actions';
+        const btnLoad = document.createElement('button'); btnLoad.className = 'secondary'; btnLoad.textContent = 'Load';
+        btnLoad.addEventListener('click', () => {
+          decisionNameInput.value = p.name;
+          pickMethod.value = p.method || 'random';
+          decisionOptions = p.options.map(o => ({ id: uid(), text: o.text, weight: o.weight || 1 }));
+          renderOptions();
+          closeModal();
+        });
+        const btnDel = document.createElement('button'); btnDel.className = 'secondary'; btnDel.textContent = 'Delete';
+        btnDel.addEventListener('click', () => {
+          if (!confirmAction('Delete profile', 'Delete this profile? This cannot be undone.')) return;
+          decisionProfiles = decisionProfiles.filter(x => x.id !== p.id);
+          saveJSON(LS_DECISIONS, decisionProfiles);
+          renderDecisionProfiles();
+          closeModal();
+        });
+        right.appendChild(btnLoad); right.appendChild(btnDel);
+        div.appendChild(left); div.appendChild(right);
+        html.appendChild(div);
+      });
+      showModal('Load Decision Profile', html);
+    });
+
+    function renderDecisionProfiles() {
+      decisionsListDiv.innerHTML = '';
+      if (decisionProfiles.length === 0) {
+        decisionsListDiv.innerHTML = '<div class="empty">No saved decision profiles.</div>';
+        return;
+      }
+      decisionProfiles.forEach(p => {
+        const el = document.createElement('div');
+        el.className = 'card';
+        el.innerHTML = '<div><strong>' + escapeHtml(p.name) + '</strong><div class="muted-block small">Options: ' + p.options.length + ' • Method: ' + escapeHtml(p.method || 'random') + '</div></div>';
+        const actions = document.createElement('div');
+        actions.className = 'list-actions';
+        const loadBtn = document.createElement('button'); loadBtn.className = 'secondary'; loadBtn.textContent = 'Load';
+        loadBtn.addEventListener('click', () => {
+          decisionNameInput.value = p.name;
+          pickMethod.value = p.method || 'random';
+          decisionOptions = p.options.map(o => ({ id: uid(), text: o.text, weight: o.weight || 1 }));
+          renderOptions();
+        });
+        const runBtn = document.createElement('button'); runBtn.textContent = 'Run'; runBtn.addEventListener('click', () => {
+          decisionNameInput.value = p.name;
+          pickMethod.value = p.method || 'random';
+          decisionOptions = p.options.map(o => ({ id: uid(), text: o.text, weight: o.weight || 1 }));
+          renderOptions();
+          runDecisionBtn.click();
+        });
+        const exportBtn = document.createElement('button'); exportBtn.className = 'secondary'; exportBtn.textContent = 'Export';
+        exportBtn.addEventListener('click', () => {
+          downloadJSON(p, `decision_profile_${p.name.replace(/\s+/g, '_') || p.id}.json`);
+        });
+        const delBtn = document.createElement('button'); delBtn.className = 'secondary'; delBtn.textContent = 'Delete';
+        delBtn.addEventListener('click', () => {
+          if (!confirmAction('Delete profile', 'Delete this profile? This cannot be undone.')) return;
+          decisionProfiles = decisionProfiles.filter(x => x.id !== p.id);
+          saveJSON(LS_DECISIONS, decisionProfiles);
+          renderDecisionProfiles();
+        });
+        actions.appendChild(loadBtn); actions.appendChild(runBtn); actions.appendChild(exportBtn); actions.appendChild(delBtn);
+        el.appendChild(actions);
+        decisionsListDiv.appendChild(el);
+      });
+    }
+
+    // Capsules
+    createCapsuleBtn.addEventListener('click', async () => {
+      const title = (capsuleTitle.value || 'Untitled').trim();
+      const message = (capsuleMessage.value || '').trim();
+      const unlock = capsuleUnlock.value ? new Date(capsuleUnlock.value) : null;
+      if (!unlock || isNaN(unlock.getTime())) {
+        showModal('Unlock time required', '<div class="empty">Please set a valid unlock date/time for your capsule.</div>');
+        return;
+      }
+      if (unlock.getTime() <= Date.now()) {
+        showModal('Invalid unlock', '<div class="empty">Unlock time must be in the future.</div>');
+        return;
+      }
+      // read files as base64
+      const files = [];
+      if (capsuleFiles.files && capsuleFiles.files.length) {
+        for (const f of Array.from(capsuleFiles.files)) {
+          const data = await readFileAsDataURL(f);
+          files.push({ name: f.name, type: f.type, size: f.size, data });
+        }
+      }
+      const cap = {
+        id: uid(),
+        title,
+        message,
+        files,
+        unlockAt: unlock.toISOString(),
+        createdAt: new Date().toISOString(),
+        visibility: capsuleVisibility.value || 'private'
+      };
+      capsules.push(cap);
+      saveJSON(LS_CAPSULES, capsules);
+      renderCapsules();
+      meta.lastSaved = (new Date()).toLocaleString();
+      saveJSON(LS_META, meta);
+      lastSavedSpan.textContent = meta.lastSaved;
+      // clear inputs
+      capsuleTitle.value = ''; capsuleMessage.value = ''; capsuleFiles.value = ''; capsuleUnlock.value = '';
+      showModal('Capsule created', '<div class="empty">Capsule saved. It will unlock at ' + new Date(cap.unlockAt).toLocaleString() + '.</div>');
+    });
+
+    function renderCapsules() {
+      capsulesListDiv.innerHTML = '';
+      if (capsules.length === 0) {
+        capsulesListDiv.innerHTML = '<div class="empty">No capsules yet.</div>';
+        return;
+      }
+      // sort by unlock date
+      const sorted = capsules.slice().sort((a, b) => new Date(a.unlockAt) - new Date(b.unlockAt));
+      sorted.forEach(c => {
+        const el = document.createElement('div');
+        el.className = 'card';
+        const left = document.createElement('div');
+        left.innerHTML = '<strong>' + escapeHtml(c.title) + '</strong><div class="muted-block small">Unlocks: ' + new Date(c.unlockAt).toLocaleString() + ' • ' + c.visibility + '</div>';
+        const right = document.createElement('div');
+        right.style.display = 'flex'; right.style.gap = '8px';
+        const viewBtn = document.createElement('button'); viewBtn.className = 'secondary'; viewBtn.textContent = 'Open';
+        viewBtn.addEventListener('click', () => {
+          const now = Date.now();
+          if (new Date(c.unlockAt).getTime() > now) {
+            showModal('Locked', '<div class="empty">This capsule is locked until ' + new Date(c.unlockAt).toLocaleString() + '.</div>');
+            return;
+          }
+          // show capsule content
+          const html = document.createElement('div');
+          html.innerHTML = '<div style="white-space:pre-wrap; margin-bottom:8px;">' + escapeHtml(c.message) + '</div>';
+          if (c.files && c.files.length) {
+            const fp = document.createElement('div');
+            fp.className = 'file-preview';
+            c.files.forEach(f => {
+              const fdiv = document.createElement('div'); fdiv.className = 'file-thumb';
+              if (f.type && f.type.startsWith('image/')) {
+                const img = document.createElement('img'); img.src = f.data; img.style.maxWidth = '160px'; img.style.borderRadius = '8px';
+                fdiv.appendChild(img);
+              } else {
+                fdiv.innerHTML = '<strong>' + escapeHtml(f.name) + '</strong><div class="muted-block small">' + escapeHtml(f.type || 'binary') + ' • ' + (f.size || 0) + ' bytes</div>';
+                const link = document.createElement('a'); link.href = f.data; link.download = f.name; link.textContent = 'Download';
+                link.className = 'caption'; link.style.display = 'block'; link.style.marginTop = '6px';
+                fdiv.appendChild(link);
+              }
+              fp.appendChild(fdiv);
+            });
+            html.appendChild(fp);
+          }
+          showModal(c.title, html);
+        });
+        const exportBtn = document.createElement('button'); exportBtn.className = 'secondary'; exportBtn.textContent = 'Export';
+        exportBtn.addEventListener('click', () => downloadJSON(c, `capsule_${c.title.replace(/\s+/g, '_') || c.id}.json`));
+        const delBtn = document.createElement('button'); delBtn.className = 'secondary'; delBtn.textContent = 'Delete';
+        delBtn.addEventListener('click', () => {
+          if (!confirmAction('Delete capsule', 'Delete this capsule? This cannot be undone.')) return;
+          capsules = capsules.filter(x => x.id !== c.id);
+          saveJSON(LS_CAPSULES, capsules);
+          renderCapsules();
+        });
+        right.appendChild(viewBtn); right.appendChild(exportBtn); right.appendChild(delBtn);
+        el.appendChild(left); el.appendChild(right);
+        capsulesListDiv.appendChild(el);
+      });
+    }
+
+    clearCapsuleBtn.addEventListener('click', () => {
+      capsuleTitle.value = ''; capsuleMessage.value = ''; capsuleFiles.value = ''; capsuleUnlock.value = '';
+    });
+
+    // Quick buttons
+    quickStudyBtn.addEventListener('click', () => {
+      decisionNameInput.value = 'Study Topic';
+      decisionOptions = [
+        { id: uid(), text: 'Math', weight: 2 },
+        { id: uid(), text: 'Computer Science', weight: 3 },
+        { id: uid(), text: 'History', weight: 1 },
+        { id: uid(), text: 'Physics', weight: 1 },
+        { id: uid(), text: 'Language', weight: 1 }
+      ];
+      pickMethod.value = 'weighted';
+      renderOptions();
+      runDecisionBtn.click();
+    });
+    quickMealBtn.addEventListener('click', () => {
+      decisionNameInput.value = "Meal";
+      decisionOptions = [
+        { id: uid(), text: 'Pasta', weight: 1 },
+        { id: uid(), text: 'Pizza', weight: 1 },
+        { id: uid(), text: 'Salad', weight: 1 },
+        { id: uid(), text: 'Ramen', weight: 1 }
+      ];
+      pickMethod.value = 'random';
+      renderOptions();
+      runDecisionBtn.click();
+    });
+
+    // Export/Import
+    exportAllBtn.addEventListener('click', () => {
+      const dump = { decisions: decisionProfiles, capsules, meta };
+      downloadJSON(dump, 'student_survival_backup.json');
+    });
+
+    importAllBtn.addEventListener('click', () => {
+      // open file input modal
+      const inp = document.createElement('input'); inp.type = 'file'; inp.accept = 'application/json';
+      inp.addEventListener('change', async () => {
+        if (!inp.files || !inp.files[0]) return;
+        const txt = await readFileAsText(inp.files[0]);
+        try {
+          const parsed = JSON.parse(txt);
+          if (parsed.decisions) decisionProfiles = parsed.decisions;
+          if (parsed.capsules) capsules = parsed.capsules;
+          if (parsed.meta) meta = parsed.meta;
+          saveJSON(LS_DECISIONS, decisionProfiles);
+          saveJSON(LS_CAPSULES, capsules);
+          saveJSON(LS_META, meta);
+          renderDecisionProfiles();
+          renderCapsules();
+          lastSavedSpan.textContent = meta.lastSaved || 'imported';
+          showModal('Import complete', '<div class="empty">Data imported successfully.</div>');
+        } catch (e) {
+          showModal('Import error', '<div class="empty">Invalid JSON file.</div>');
+        }
+      });
+      inp.click();
+    });
+
+    // Modal helpers
+    function showModal(title, content) {
+      modalTitle.textContent = title;
+      modalBody.innerHTML = '';
+      if (typeof content === 'string') {
+        modalBody.innerHTML = content;
+      } else {
+        modalBody.appendChild(content);
+      }
+      modalRoot.style.display = 'flex';
+      modalRoot.setAttribute('aria-hidden', 'false');
+    }
+    function closeModal() { modalRoot.style.display = 'none'; modalRoot.setAttribute('aria-hidden', 'true'); }
+    modalClose.addEventListener('click', closeModal);
+    modalRoot.addEventListener('click', (e) => { if (e.target === modalRoot) closeModal(); });
+
+    // Small confirm replacement (non-blocking)
+    function confirmAction(title, message) {
+      // shows modal and returns true only if user clicks confirm — implement simple synchronous behavior via callback prompt
+      // For this demo, use window.confirm (acceptable fallback) — but we avoided earlier; we'll show a modal with Confirm and Cancel and use a promise.
+      let confirmed = false;
+      const prom = new Promise(resolve => {
+        const body = document.createElement('div');
+        body.innerHTML = '<div class="muted-block small" style="margin-bottom:12px;">' + escapeHtml(message) + '</div>';
+        const btns = document.createElement('div'); btns.style.display = 'flex'; btns.style.gap = '8px';
+        const yes = document.createElement('button'); yes.className = 'danger'; yes.textContent = 'Confirm';
+        const no = document.createElement('button'); no.className = 'secondary'; no.textContent = 'Cancel';
+        yes.addEventListener('click', () => { confirmed = true; closeModal(); resolve(true); });
+        no.addEventListener('click', () => { confirmed = false; closeModal(); resolve(false); });
+        btns.appendChild(yes); btns.appendChild(no);
+        body.appendChild(btns);
+        showModal(title, body);
+      });
+      // busy-wait until resolved (but since callers expect boolean, we must adapt)
+      // To keep API simple, block via synchronous confirm fallback if needed:
+      // We'll return synchronous result using window.confirm if modal promise can't be awaited by caller.
+      // For our usage above, callers immediately check return value, so use confirm() fallback.
+      return window.confirm(message);
+    }
+
+    // Helpers
+    function saveJSON(key, obj) { try { localStorage.setItem(key, JSON.stringify(obj)); } catch (e) { console.error('Save error', e); } }
+    function loadJSON(key) { try { const v = localStorage.getItem(key); return v ? JSON.parse(v) : null; } catch (e) { return null; } }
+    function downloadJSON(obj, filename) {
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(new Blob([JSON.stringify(obj, null, 2)], { type: 'application/json' }));
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 5000);
+    }
+    function readFileAsDataURL(file) { return new Promise((res, rej) => { const r = new FileReader(); r.onload = () => res(r.result); r.onerror = rej; r.readAsDataURL(file); }); }
+    function readFileAsText(file) { return new Promise((res, rej) => { const r = new FileReader(); r.onload = () => res(r.result); r.onerror = rej; r.readAsText(file); }); }
+    function escapeHtml(str) { if (!str) return ''; return String(str).replace(/[&<>"']/g, s => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[s])); }
+
+    // small feature: delete expired capsules automatically? Not required. But show unlocked indicator.
+    setInterval(() => {
+      // update capsules display small indicator (not necessary heavy)
+      // optionally flash if something just unlocked
+      // For brevity just re-render every minute
+      renderCapsules();
+    }, 60_000);
+
+    // Initial last-saved persist
+    saveJSON(LS_DECISIONS, decisionProfiles);
+    saveJSON(LS_CAPSULES, capsules);
+    saveJSON(LS_META, meta);
+
+  </script>
+</body>
+
+</html>
